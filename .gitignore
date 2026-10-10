@@ -1,0 +1,36 @@
+# Build output
+target/
+build/
+out/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+**/application.properties
+**/application-local.yml
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.swp
+
+# Maven Wrapper
+!mvnw
+!mvnw.cmd
+!.mvn/wrapper/
