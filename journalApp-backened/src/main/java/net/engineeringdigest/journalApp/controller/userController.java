@@ -4,6 +4,7 @@ import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.service.UserServices;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +22,18 @@ public class userController {
     }
 
     @GetMapping("/id/{id}")
-    public User findUserById(@PathVariable ObjectId id){
+    public ResponseEntity<?> findUserById(@PathVariable ObjectId id){
         return services.findUserById(id);
     }
 
     @PostMapping
     public void saveUser(@RequestBody User user){
         services.saveUser(user);
+    }
+
+    @PutMapping("edit/{userName}")
+    public ResponseEntity<?> editUser(@PathVariable String userName, @RequestBody User user){
+        return services.updateUser(userName,user);
     }
 
     @DeleteMapping("/id/{id}")
