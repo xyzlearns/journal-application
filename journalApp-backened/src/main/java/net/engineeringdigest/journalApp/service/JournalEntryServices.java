@@ -24,11 +24,18 @@ public class JournalEntryServices {
 
     @Transactional
     public void saveEntry(String userName,JournalEntry entry){
-        User user = userServices.findByUserName(userName);
-        entry.setDate(LocalDateTime.now());
-        JournalEntry saved = journalEntryRepository.save(entry);
-        user.getJournalEntries().add(saved);
-        userServices.saveUser(user);
+        try{
+            User user = userServices.findByUserName(userName);
+            entry.setDate(LocalDateTime.now());
+            JournalEntry saved = journalEntryRepository.save(entry);
+            user.getJournalEntries().add(saved);
+            userServices.saveUser(user);
+        }
+        catch (Exception e){
+            System.out.println(e);
+            throw new RuntimeException("an error occurred while saving the entry",e);
+        }
+
 
     }
 
@@ -42,10 +49,16 @@ public class JournalEntryServices {
 
     @Transactional
     public void deleteById(ObjectId id, String userName){
-        User user = userServices.findByUserName(userName);
-        user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-        userServices.saveUser(user);
-        journalEntryRepository.deleteById(id);
+        try{
+            User user = userServices.findByUserName(userName);
+            user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+            userServices.saveUser(user);
+            journalEntryRepository.deleteById(id);
+        }
+        catch (Exception e){
+            throw new RuntimeException("error occurred while  deleting entry",e);
+        }
+        
     }
 
     public ResponseEntity<?> updateById(ObjectId id, JournalEntry newEntry){
