@@ -58,7 +58,7 @@ public class JournalEntryServices {
         catch (Exception e){
             throw new RuntimeException("error occurred while  deleting entry",e);
         }
-        
+
     }
 
     public ResponseEntity<?> updateById(ObjectId id, JournalEntry newEntry){
