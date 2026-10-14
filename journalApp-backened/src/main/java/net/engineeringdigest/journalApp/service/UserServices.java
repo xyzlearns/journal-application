@@ -6,8 +6,11 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -16,7 +19,12 @@ public class UserServices {
     @Autowired
     private UserRepository repository;
 
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public void saveUser(User user){
+        String password = user.getPassword();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRoles(Arrays.asList("USER"));
         repository.save(user);
     }
 
@@ -38,7 +46,7 @@ public class UserServices {
         User user = repository.findByUserName(userName);
         user.setUserName(incomingUser.getUserName());
         user.setPassword(incomingUser.getPassword());
-        repository.save(user);
+        saveUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
