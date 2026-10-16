@@ -61,14 +61,21 @@ public class JournalEntryServices {
 
     }
 
-    public ResponseEntity<?> updateById(ObjectId id, JournalEntry newEntry){
+    public ResponseEntity<?> updateById(ObjectId id, JournalEntry newEntry, String userName){
         JournalEntry entry = journalEntryRepository.findById(id).orElse(null);
-        if(entry!=null){
+        User user = userServices.findByUserName(userName);
+        List<JournalEntry> journalEntries = user.getJournalEntries();
+        boolean valid = false;
+        for(JournalEntry j: journalEntries){
+            if(j.getId().equals(id)) valid = true;
+        }
+        if(valid && entry!=null){
             entry.setTitle(newEntry.getTitle() != null ? newEntry.getTitle() : entry.getTitle());
             entry.setContent(newEntry.getContent() != null ? newEntry.getContent() : entry.getContent());
             journalEntryRepository.save(entry);
             return new ResponseEntity<JournalEntry>(entry, HttpStatus.OK);
         }
+
         return  new ResponseEntity<JournalEntry>(HttpStatus.NOT_FOUND);
 
     }
