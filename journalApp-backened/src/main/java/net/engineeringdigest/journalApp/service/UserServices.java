@@ -59,4 +59,11 @@ public class UserServices {
     public void deleteUserById(ObjectId id){
         repository.deleteById(id);
     }
+
+    public void saveAdmin(User user) {
+        String password = user.getPassword();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRoles(Arrays.asList("USER","ADMIN"));
+        repository.save(user);
+    }
 }
