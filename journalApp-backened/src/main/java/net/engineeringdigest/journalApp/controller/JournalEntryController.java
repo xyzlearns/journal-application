@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -52,8 +51,22 @@ class JournalEntryController {
 
     }
 
+    @GetMapping("id/{entryId}")
+    public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable ObjectId entryId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        User user = userServices.findByUserName(userName);
+        List<JournalEntry> journalEntries = user.getJournalEntries();
+        for(JournalEntry j: journalEntries){
+            if(j.getId().equals(entryId)) {
+                return new ResponseEntity<>(j,HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @DeleteMapping("id/{entryId}")
-    public ResponseEntity<?> delete(@PathVariable ObjectId entryId){
+    public ResponseEntity<?> deleteEntry(@PathVariable ObjectId entryId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         journalEntryServices.deleteById(entryId,userName);
@@ -61,7 +74,7 @@ class JournalEntryController {
     }
 
     @PutMapping("id/{entryId}")
-    public ResponseEntity<?> update(@PathVariable ObjectId entryId,@RequestBody JournalEntry entry){
+    public ResponseEntity<?> updateEntry(@PathVariable ObjectId entryId, @RequestBody JournalEntry entry){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         return journalEntryServices.updateById(entryId,entry,userName);

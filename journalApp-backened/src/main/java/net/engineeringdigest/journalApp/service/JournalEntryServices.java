@@ -29,7 +29,7 @@ public class JournalEntryServices {
             entry.setDate(LocalDateTime.now());
             JournalEntry saved = journalEntryRepository.save(entry);
             user.getJournalEntries().add(saved);
-            userServices.saveUser(user);
+            userServices.saveExistingUser(user);
         }
         catch (Exception e){
             System.out.println(e);
@@ -52,7 +52,7 @@ public class JournalEntryServices {
         try{
             User user = userServices.findByUserName(userName);
             user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-            userServices.saveUser(user);
+            userServices.saveExistingUser(user);
             journalEntryRepository.deleteById(id);
         }
         catch (Exception e){
@@ -62,14 +62,18 @@ public class JournalEntryServices {
     }
 
     public ResponseEntity<?> updateById(ObjectId id, JournalEntry newEntry, String userName){
-        JournalEntry entry = journalEntryRepository.findById(id).orElse(null);
+        JournalEntry entry = new JournalEntry();
         User user = userServices.findByUserName(userName);
         List<JournalEntry> journalEntries = user.getJournalEntries();
         boolean valid = false;
         for(JournalEntry j: journalEntries){
-            if(j.getId().equals(id)) valid = true;
+            if (j.getId().equals(id)) {
+                valid = true;
+                entry = j;
+                break;
+            }
         }
-        if(valid && entry!=null){
+        if(valid){
             entry.setTitle(newEntry.getTitle() != null ? newEntry.getTitle() : entry.getTitle());
             entry.setContent(newEntry.getContent() != null ? newEntry.getContent() : entry.getContent());
             journalEntryRepository.save(entry);

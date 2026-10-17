@@ -22,16 +22,7 @@ public class PublicController {
 
     @PostMapping("/create-user")
     public void saveUser(@RequestBody User user){
-        userServices.saveUser(user);
-    }
-
-    @GetMapping("id/{entryId}")
-    public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable ObjectId entryId){
-        Optional<JournalEntry> entry = journalEntryServices.findById(entryId);
-        if(entry.isPresent()){
-            return new ResponseEntity<>(entry.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        userServices.saveNewUser(user);
     }
 
 }

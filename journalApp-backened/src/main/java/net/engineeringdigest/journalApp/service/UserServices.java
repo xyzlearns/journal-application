@@ -21,12 +21,17 @@ public class UserServices {
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public void saveUser(User user){
+    public void saveNewUser(User user){
         String password = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));
         user.setRoles(Arrays.asList("USER"));
         repository.save(user);
     }
+
+    public void saveExistingUser(User user){
+        repository.save(user);
+    }
+
 
     public List<User> getAllUsers(){
         return repository.findAll();
@@ -45,8 +50,8 @@ public class UserServices {
     public ResponseEntity<?> updateUser(String userName, User incomingUser){
         User user = repository.findByUserName(userName);
         user.setUserName(incomingUser.getUserName());
-        user.setPassword(incomingUser.getPassword());
-        saveUser(user);
+        user.setPassword(passwordEncoder.encode(incomingUser.getPassword()));
+        saveExistingUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
