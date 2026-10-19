@@ -26,7 +26,13 @@ public class AdminController {
     }
 
     @PostMapping("/create-admin-user")
-    public void createAdminUer(@RequestBody User user){
-        userServices.saveAdmin(user);
+    public ResponseEntity<?> createAdminUer(@RequestBody User user){
+        try {
+            userServices.saveAdmin(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

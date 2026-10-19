@@ -60,10 +60,15 @@ public class UserServices {
         repository.deleteById(id);
     }
 
-    public void saveAdmin(User user) {
-        String password = user.getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRoles(Arrays.asList("USER","ADMIN"));
-        repository.save(user);
+    public ResponseEntity<?> saveAdmin(User user) {
+        try {
+            String password = user.getPassword();
+            user.setPassword(passwordEncoder.encode(password));
+            user.setRoles(Arrays.asList("USER","ADMIN"));
+            repository.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
