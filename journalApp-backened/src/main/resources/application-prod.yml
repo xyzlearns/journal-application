@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: journal-application
+  data:
+    mongodb:
+      uri:mongodb+srv://<username>:<password>@journal.hozyg7i.mongodb.net/?appName=Journal
+      database:journaldb
+      auto-index-creation:true
