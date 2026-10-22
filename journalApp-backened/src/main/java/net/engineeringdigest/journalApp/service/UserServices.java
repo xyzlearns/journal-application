@@ -3,6 +3,8 @@ package net.engineeringdigest.journalApp.service;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +23,18 @@ public class UserServices {
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServices.class);
+
     public void saveNewUser(User user){
-        String password = user.getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRoles(Arrays.asList("USER"));
-        repository.save(user);
+        try {
+            String password = user.getPassword();
+            user.setPassword(passwordEncoder.encode(password));
+            user.setRoles(Arrays.asList("USER"));
+            repository.save(user);
+        } catch (Exception e) {
+            logger.info("exception happening");
+            throw new RuntimeException("an error occured");
+        }
     }
 
     public void saveExistingUser(User user){
