@@ -2,8 +2,10 @@ package net.engineeringdigest.journalApp.controller;
 
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.service.UserServices;
+import net.engineeringdigest.journalApp.service.WeatherService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +23,9 @@ public class userController {
 
     @Autowired
     private UserServices services;
+
+    @Autowired
+    private WeatherService weatherService;
 
     @GetMapping
     public List<User> getAllUser(){
@@ -47,5 +52,12 @@ public class userController {
         User user = services.findByUserName(userName);
 
         services.deleteUserById(user.getId());
+    }
+
+    @GetMapping("/greatings")
+    public ResponseEntity<?> greatings(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return new ResponseEntity<>("Hi "+username + "weather feels like "+weatherService.getWeather("Mumbai").getCurrent().getFeelslike(),HttpStatus.OK);
     }
 }
