@@ -58,6 +58,7 @@ public class userController {
     public ResponseEntity<?> greatings(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        return new ResponseEntity<>("Hi "+username + "weather feels like "+weatherService.getWeather("Mumbai").getCurrent().getFeelslike(),HttpStatus.OK);
+
+        return new ResponseEntity<>("Hi "+username + "weather feels like "+weatherService.getWeather("Mumbai").getCurrent().getFeelslike(),HttpStatus.NO_CONTENT);
     }
 }
