@@ -1,6 +1,7 @@
 package net.engineeringdigest.journalApp.service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.engineeringdigest.journalApp.cache.AppCache;
 import net.engineeringdigest.journalApp.responce.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,14 +16,16 @@ import org.springframework.web.client.RestTemplate;
 public class WeatherService {
     @Value("${weather.api.key}")
     private String apiKey;
-    private static final String API="https://api.weatherstack.com/current?access_key=API_KEY&query=CITY";
+
+    @Autowired
+    private AppCache appCache;
 
     @Autowired
     private RestTemplate restTemplate;
 
     public WeatherResponse getWeather (String city){
 
-        String finalApi = API.replace("API_KEY", apiKey).replace("CITY", city);
+        String finalApi = appCache.APP_CACHE.get("weather_api").replace("<apiKey>", apiKey).replace("<city>", city);
 
         log.info(finalApi);
 
