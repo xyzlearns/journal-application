@@ -2,12 +2,12 @@ package net.engineeringdigest.journalApp.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.engineeringdigest.journalApp.cache.AppCache;
+import net.engineeringdigest.journalApp.constants.PlaceHolders;
 import net.engineeringdigest.journalApp.responce.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +25,7 @@ public class WeatherService {
 
     public WeatherResponse getWeather (String city){
 
-        String finalApi = appCache.APP_CACHE.get("weather_api").replace("<apiKey>", apiKey).replace("<city>", city);
+        String finalApi = appCache.appCache.get(AppCache.keys.WEATHER_API.toString()).replace(PlaceHolders.API_KEY, apiKey).replace(PlaceHolders.CITY, city);
 
         log.info(finalApi);
 
