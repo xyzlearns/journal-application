@@ -19,6 +19,8 @@ public class User {
     @NonNull
     @Indexed(unique = true)
     private String userName;
+    private String email;
+    private boolean sentimentAnalysis;
     @NonNull
     private String password;
     @DBRef
