@@ -6,6 +6,17 @@ spring:
       uri:mongodb+srv://<username>:<password>@journal.hozyg7i.mongodb.net/?appName=Journal
       database:journaldb
       auto-index-creation:true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: asmitjyotib@gmail.com
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 weather:
   api:
     key: API_KEY
