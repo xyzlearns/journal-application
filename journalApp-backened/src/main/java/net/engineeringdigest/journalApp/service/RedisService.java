@@ -19,7 +19,10 @@ public class RedisService {
         try {
             Object o = redisTemplate.opsForValue().get(key);
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(o.toString(),entityClass);
+            if(o != null){
+                return mapper.readValue(o.toString(), entityClass);
+            }
+            return null;
         }
         catch (Exception e){
             log.error("Exception",e);
