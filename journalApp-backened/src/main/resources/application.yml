@@ -1,6 +1,9 @@
 spring:
   application:
     name: journal-application
+  redis:
+    host: localhost
+    port: 6379
   data:
     mongodb:
       uri:mongodb+srv://<username>:<password>@journal.hozyg7i.mongodb.net/?appName=Journal
